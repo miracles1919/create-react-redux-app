@@ -2,27 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Item from 'components/counter';
+import {
+  increment, decrement, incrementAsync, incrementOdd,
+} from 'actions/counter';
+import { ActionCreators as UndoActionCreators } from 'redux-undo';
 
 const Counter = ({
   dispatch, counter,
 }) => {
   const onIncrement = () => {
-    dispatch({ type: 'INCREMENT' });
+    dispatch(increment());
   };
   const onDecrement = () => {
-    dispatch({ type: 'DECREMENT' });
+    dispatch(decrement());
   };
   const onIncrementAsync = () => {
-    dispatch(dispatch => {
-      setTimeout(() => {
-        dispatch({ type: 'INCREMENT' });
-      }, 1000);
-    });
+    dispatch(incrementAsync());
   };
   const onIncrementIfOdd = () => {
-    dispatch({ type: 'INCREMENT_IF_ODD' });
+    dispatch(incrementOdd());
   };
-  console.log('counter', counter);
+  const onUndo = () => {
+    dispatch(UndoActionCreators.undo());
+  };
+  const onRedo = () => {
+    dispatch(UndoActionCreators.redo());
+  };
   return (
     <div>
       <Item
@@ -31,6 +36,8 @@ const Counter = ({
         onDecrement={onDecrement}
         onIncrementAsync={onIncrementAsync}
         onIncrementIfOdd={onIncrementIfOdd}
+        onUndo={onUndo}
+        onRedo={onRedo}
       />
     </div>
   );
@@ -39,9 +46,11 @@ const Counter = ({
 Counter.propTypes = {
   dispatch: PropTypes.func.isRequired,
   counter: PropTypes.number.isRequired,
-  // onIncrementIfOdd: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({ counter: state.counter });
+const mapStateToProps = state => {
+  console.log(state);
+  return ({ counter: state.counter.present });
+};
 
 export default connect(mapStateToProps)(Counter);
