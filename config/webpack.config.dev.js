@@ -63,6 +63,7 @@ module.exports = {
       'components': `${paths.appSrc}/components`,
       'utils': `${paths.appSrc}/utils`,
       'actions': `${paths.appSrc}/actions`,
+      'services': `${paths.appSrc}/services`,
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
